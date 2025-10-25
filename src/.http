@@ -1,0 +1,40 @@
+GET http://localhost:3000/
+
+
+
+# Get all Countries
+GET http://localhost:3000/countries
+
+
+
+# Get Coun African countries Data
+GET http://localhost:3000/countries?region=Africa&sort=gdp_desc
+
+
+
+# Refresh Countries Data
+POST http://localhost:3000/countries/refresh
+
+
+
+# Get Africa Only 
+GET http://localhost:3000/countries?region=Africa
+
+
+# Get Country by name 
+GET http://localhost:3000/countries/Nigeria
+
+
+# Deletes Country by name 
+DELETE http://localhost:3000/countries/Namibia
+
+
+# Get image
+GET http://localhost:3000/countries/image
+
+
+# Get status
+GET http://localhost:3000/countries/status
+
+
+
