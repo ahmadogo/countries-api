@@ -16,6 +16,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       useFactory: (config: ConfigService) => {
         const databaseUrl = config.get<string>('DATABASE_URL');
         if (databaseUrl) {
+          const ssl =
+            config.get('NODE_ENV') === 'production'
+              ? { rejectUnauthorized: false }
+              : undefined;
           return {
             type: 'postgres' as const,
             url: databaseUrl,

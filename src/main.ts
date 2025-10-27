@@ -4,7 +4,6 @@ import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
-  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
   process.env['HTTPS_PROXY'] = '';
   process.env['HTTP_PROXY'] = '';
   process.env['NODE_NO_HTTP2'] = '1';

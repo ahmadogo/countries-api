@@ -23,7 +23,7 @@ GET http://localhost:3000/countries?region=Africa
 
 
 # Get Country by name 
-GET http://localhost:3000/countries/Nigeria
+GET http://localhost:3000/countries/status
 
 
 # Deletes Country by name 
