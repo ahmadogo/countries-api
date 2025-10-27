@@ -3,7 +3,8 @@ GET http://localhost:3000/
 
 
 # Get all Countries
-GET http://localhost:3000/countries
+GET https://countries-api-production.up.railway.app/countries
+
 
 
 
