@@ -10,6 +10,11 @@ async function bootstrap() {
   process.env['NODE_NO_HTTP2'] = '1';
 
   const app = await NestFactory.create(AppModule);
+  // Railway provides PORT environment variable
+  const port = process.env.PORT || 3000;
+
+  // Enable CORS for Railway deployment
+  app.enableCors();
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalPipes(
     new ValidationPipe({

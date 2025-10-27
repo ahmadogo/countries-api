@@ -3,7 +3,7 @@ GET http://localhost:3000/
 
 
 # Get all Countries
-GET https://countries-api-production.up.railway.app/countries
+GET http://countries-api-production.up.railway.app/countries/image
 
 
 
