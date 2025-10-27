@@ -69,10 +69,14 @@ export class CountriesService {
       const now = new Date();
 
       for (const c of countries) {
+        // inside for (const c of countries) { ... }
+
         const name = c.name;
         const capital = c.capital ?? null;
         const region = c.region ?? null;
-        const population = c.population ?? 0;
+
+        // COERCE population to number (restcountries sometimes returns numeric strings)
+        const population = Number(c.population) || 0;
         const flag_url = c.flag ?? null;
 
         let currency_code: string | null = null;
@@ -81,22 +85,33 @@ export class CountriesService {
 
         if (Array.isArray(c.currencies) && c.currencies.length > 0) {
           currency_code = c.currencies[0]?.code ?? null;
+
           if (currency_code) {
-            const foundRate = this.getRateForCode(rates, currency_code);
-            if (foundRate !== null && typeof foundRate === 'number') {
-              exchange_rate = foundRate;
+            // get raw rate (could be string or number) and coerce to number
+            const rawRate = this.getRateForCode(rates, currency_code);
+            const rateNum =
+              rawRate === null || rawRate === undefined
+                ? null
+                : Number(rawRate);
+
+            if (rateNum !== null && !Number.isNaN(rateNum) && rateNum > 0) {
+              exchange_rate = rateNum;
               const multiplier = this.randomMultiplier();
+              // Ensure both operands are numbers before dividing
               estimated_gdp = (population * multiplier) / exchange_rate;
             } else {
+              // currency exists but not found in rates
               exchange_rate = null;
               estimated_gdp = null;
             }
           } else {
+            // currencies array present but no usable code
             currency_code = null;
             exchange_rate = null;
             estimated_gdp = 0;
           }
         } else {
+          // no currencies
           currency_code = null;
           exchange_rate = null;
           estimated_gdp = 0;
@@ -219,7 +234,18 @@ export class CountriesService {
     }
 
     const rows = await qb.getMany();
-    return rows;
+    return rows.map((r) => ({
+      id: r.id,
+      name: r.name,
+      capital: r.capital ?? null,
+      region: r.region ?? null,
+      population: Number(r.population) || 0,
+      currency_code: r.currency_code ?? null,
+      exchange_rate: r.exchange_rate === null ? null : Number(r.exchange_rate),
+      estimated_gdp: r.estimated_gdp === null ? null : Number(r.estimated_gdp),
+      flag_url: r.flag_url ?? null,
+      last_refreshed_at: r.last_refreshed_at,
+    }));
   }
 
   public async getByName(name: string) {
@@ -231,13 +257,16 @@ export class CountriesService {
   }
 
   public async deleteByName(name: string) {
-    const res = await this.repo
+    // Use parameterized query to avoid SQL injection and ensure case-insensitive match
+    const result = await this.repo
       .createQueryBuilder()
       .delete()
       .from(Country)
       .where('LOWER(name) = LOWER(:name)', { name })
       .execute();
-    return res.affected && res.affected > 0;
+
+    // result.affected will be number of rows deleted
+    return (result?.affected ?? 0) > 0;
   }
 
   public async status() {

@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { CountriesModule } from './countries/countries.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { stat } from 'fs';
+import { StatusController } from './status/status.controller';
 
 @Module({
   imports: [

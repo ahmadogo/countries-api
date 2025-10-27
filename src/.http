@@ -3,7 +3,7 @@ GET http://localhost:3000/
 
 
 # Get all Countries
-GET http://countries-api-production.up.railway.app/countries/image
+GET http://countries-api-production.up.railway.app/countries
 
 
 
@@ -14,7 +14,7 @@ GET http://localhost:3000/countries?region=Africa&sort=gdp_desc
 
 
 # Refresh Countries Data
-POST http://localhost:3000/countries/refresh
+GET http://localhost:3000/status
 
 
 
